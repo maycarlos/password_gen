@@ -20,18 +20,18 @@ def password_lenght():
 def chosen_password_parameters():
     """
     Pedir ao utilizador os parametros que quer na sua password
-    Letras 
-    punctuation = 
+    Letras = abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
+    punctuation = !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
     numero = 0123456789
     """
     quer_letras = input('Queres letras na password?(True/False): ')
-    quer_puntuaction = input('Queres pontuação no password?(True/False): ')
     quer_numeros = input('Queres números na password?(True/False): ')
+    quer_puntuaction = input('Queres pontuação no password?(True/False): ')
 
     #Percebi que não pode usar sets nem tuples, porque são immutable
-    resultado = [quer_letras, quer_puntuaction, quer_numeros]
+    resultado = [quer_letras, quer_numeros, quer_puntuaction]
 
-    #Substituir todos as strings com Booleans 
+    #Substitui todos as strings com Booleans
     for i,j in enumerate(resultado):
         resultado[i] = eval(j)
 
@@ -44,8 +44,8 @@ def characters_included(escolha):
     """
     modelo_da_pass = ''
     modelo_da_pass += letras if escolha[0] else ''
-    modelo_da_pass += punctuation if escolha[1] else ''
-    modelo_da_pass += numero if escolha[2] else ''
+    modelo_da_pass += numero if escolha[1] else ''
+    modelo_da_pass += punctuation if escolha[2] else ''
 
     return modelo_da_pass
 
