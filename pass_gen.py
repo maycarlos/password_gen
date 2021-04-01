@@ -1,8 +1,8 @@
 import random
 import string
-import json 
 import getpass
 import time
+import json
 
 #Precisa de ser instalada previamente -> pip install alive_progress
 from alive_progress import alive_bar
@@ -15,14 +15,18 @@ numero = string.digits
 #não se usa a string.printable() para dar a oportunidade de poder escolher o que deseja ter na pass
 
 def password_lenght():
+    #Começo a meter Try e excepts em todas as partes que requerem input humano? ou um tipo especifico de dados
     return int(input('Insira o tamanho da password que deseja obter: '))
 
 def chosen_password_parameters():
     """
-    Pedir ao utilizador os parametros que quer na sua password
-    Letras = abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
-    punctuation = !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
-    numero = 0123456789
+    Pedir ao utilizador os parametros que quer na sua password.  
+    
+    Letras = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ". 
+
+    punctuation = "!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~".  
+
+    número = "0123456789".
     """
     quer_letras = input('Queres letras na password?(True/False): ')
     quer_numeros = input('Queres números na password?(True/False): ')
@@ -31,7 +35,7 @@ def chosen_password_parameters():
     #Percebi que não pode usar sets nem tuples, porque são immutable
     resultado = [quer_letras, quer_numeros, quer_puntuaction]
 
-    #Substitui todos as strings com Booleans
+    #Substitui todas as strings com Booleans
     for i,j in enumerate(resultado):
         resultado[i] = eval(j)
 
@@ -49,34 +53,60 @@ def characters_included(escolha):
 
     return modelo_da_pass
 
-def generate_password(constituintes ,tamanho = 8):
+def generate_password(constituintes ,tamanho):
     """
-    Depois de termos todos os parametros da password definidos
+    Depois de termos todos os parametros da password definidos.  
     Damos shufle a string com os constituintes e cortamos a string resultante em função do tamanho determinado
     """
     baralho = list(constituintes)
     random.shuffle(baralho)
-
     pass_final = ''.join(baralho)
 
-    #Aqui apenas pego nos primeiros 8 caracteres da string baralhada, se calhar devo escolher letras aleatoriamente da string(?)
+    #Aqui apenas pego nos primeiros n caracteres da string baralhada, se calhar devo escolher letras aleatoriamente da string(?)
     return pass_final[:tamanho]
 
-def main():
-    tamanho = password_lenght()
+def export_password(palavra_pass):
+    """
+    Depois de gerar a palavra pass, exporta-la para um ficheiro json.   
+    Ainda não faço a minima de como é que deve formatar bem os ficheiros json.  
+    TODO Entender melhor o que está a passar nesta parte, so deixei assim porque funciona. Como? n sei 
+    Onde devo perguntar onde é o sítio para por a palavra_pass
+    """
+    def insert_data(dados):
+        with open("passwords\save_files.json", 'w') as f:
+            json.dump(dados, f, indent= 4)
 
+    with open("passwords\save_files.json") as save:
+        dados = json.load(save)
+        infor_utilizador = dados["user"] 
+
+        nova_informação = {
+            "name":f"{getpass.getuser().title()}",
+            "password":f"{palavra_pass}"
+        }
+
+        infor_utilizador.append(nova_informação)
+    
+    insert_data(dados)
+
+
+
+def main():
+    #Será que devo deixar esta parte assim?
+    tamanho = password_lenght()
     parametros_desejados = chosen_password_parameters()
     molde_password = characters_included(parametros_desejados)
-
     password_desejada = generate_password(molde_password, tamanho)
     
-    #Sem utilidade nenhuma, apenas acho engraçado ter barras em trabalhos 
+    #Sem utilidade nenhuma, apenas acho engraçado ter barras
     with alive_bar(100, 'A gerar a password') as bar:
         for _ in range(100):
             time.sleep(0.01)
             bar()
 
-    print(f'User:\t\t{getpass.getuser().title()}.\nPassword:\t{password_desejada}') 
+    export_password(password_desejada)
+
+    print("\nDone!")
 
 if __name__ == '__main__':
     main()
