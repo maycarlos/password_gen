@@ -16,7 +16,12 @@ numero = string.digits
 
 def password_lenght():
     #Começo a meter Try e excepts em todas as partes que requerem input humano? ou um tipo especifico de dados
-    return int(input('Insira o tamanho da password que deseja obter: '))
+    try:
+        return int(input('Insira o tamanho da password que deseja obter: '))
+    except ValueError:
+        print("Por favor insira corretamento o o tamanho que deseja.")
+        # Não sei porquê mas n estava a dar return ao númer que desejava sem este return. Se calhar deve ser por causa do return no try idk
+        return password_lenght()
 
 def chosen_password_parameters():
     """
@@ -32,12 +37,16 @@ def chosen_password_parameters():
     quer_numeros = input('Queres números na password?(True/False): ')
     quer_puntuaction = input('Queres pontuação no password?(True/False): ')
 
-    #Percebi que não pode usar sets nem tuples, porque são immutable
     resultado = [quer_letras, quer_numeros, quer_puntuaction]
 
     #Substitui todas as strings com Booleans
     for i,j in enumerate(resultado):
-        resultado[i] = eval(j)
+        try:
+            resultado[i] = eval(j.title())
+        except:
+            print("O valor que introduziu não permite realizar a função.\nPor favor insira True ou False nos lugares adequados")
+            time.sleep(1)
+            chosen_password_parameters()
 
     return resultado
     
@@ -70,8 +79,9 @@ def export_password(palavra_pass):
     Depois de gerar a palavra pass, exporta-la para um ficheiro json.   
     Ainda não faço a minima de como é que deve formatar bem os ficheiros json.  
     TODO Entender melhor o que está a passar nesta parte, so deixei assim porque funciona. Como? n sei 
-    Onde devo perguntar onde é o sítio para por a palavra_pass
     """
+    destino = str(input("Onde é que esta password vai ser utilzada? "))
+
     def insert_data(dados):
         with open("passwords\save_files.json", 'w') as f:
             json.dump(dados, f, indent= 4)
@@ -82,6 +92,7 @@ def export_password(palavra_pass):
 
         nova_informação = {
             "name":f"{getpass.getuser().title()}",
+            "site":f"{destino.title()}",
             "password":f"{palavra_pass}"
         }
 
@@ -92,7 +103,6 @@ def export_password(palavra_pass):
 
 
 def main():
-    #Será que devo deixar esta parte assim?
     tamanho = password_lenght()
     parametros_desejados = chosen_password_parameters()
     molde_password = characters_included(parametros_desejados)
@@ -103,6 +113,8 @@ def main():
         for _ in range(100):
             time.sleep(0.01)
             bar()
+    
+    print(f"\nUser:\t\t{getpass.getuser().title()}.\nPassword:\t{password_desejada}")
 
     export_password(password_desejada)
 
