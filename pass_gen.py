@@ -92,7 +92,7 @@ def export_password(palavra_pass):
 
         nova_informação = {
             "name":f"{getpass.getuser().title()}",
-            "site":f"{destino.title()}",
+            "site":f"{destino}",
             "password":f"{palavra_pass}"
         }
 
@@ -100,6 +100,20 @@ def export_password(palavra_pass):
     
     insert_data(dados)
 
+def get_pass():
+    """
+    Aceder ao ficheiro JSON e ter a pass que queremos ver
+    """
+    with open("passwords\save_files.json", 'r') as p:
+        users = json.load(p)
+        infor_utilizador = users["user"]
+
+        coisa = zip(range(1, len(infor_utilizador)+1), infor_utilizador)
+
+        for i,j in coisa:
+            print(f"{i}-{j.get('name')} for {j.get('site')}")
+    
+    # TODO Meter aqui a coisinha do menu para escolher qual é que eu quero e aprender a copia-la logo para a area de trabalho
 
 
 def main():
