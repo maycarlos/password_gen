@@ -21,6 +21,7 @@ def password_lenght():
     except ValueError:
         print("Por favor insira corretamento o o tamanho que deseja.")
         # Não sei porquê mas n estava a dar return ao númer que desejava sem este return. Se calhar deve ser por causa do return no try idk
+        time.sleep(1)
         return password_lenght()
 
 def chosen_password_parameters():
@@ -80,13 +81,13 @@ def export_password(palavra_pass):
     Ainda não faço a minima de como é que deve formatar bem os ficheiros json.  
     TODO Entender melhor o que está a passar nesta parte, so deixei assim porque funciona. Como? n sei 
     """
-    destino = str(input("Onde é que esta password vai ser utilzada? "))
+    destino = str(input("Onde é que esta password vai ser utilizada? "))
 
     def insert_data(dados):
-        with open("passwords\save_files.json", 'w') as f:
+        with open("passwords/save_files.json", 'w') as f:
             json.dump(dados, f, indent= 4)
 
-    with open("passwords\save_files.json") as save:
+    with open("passwords/save_files.json") as save:
         dados = json.load(save)
         infor_utilizador = dados["user"] 
 
@@ -104,14 +105,15 @@ def get_pass():
     """
     Aceder ao ficheiro JSON e ter a pass que queremos ver
     """
-    with open("passwords\save_files.json", 'r') as p:
+    with open("passwords/save_files.json", 'r') as p:
         users = json.load(p)
         infor_utilizador = users["user"]
 
-        coisa = zip(range(1, len(infor_utilizador)+1), infor_utilizador)
+        enumerador_de_passwords = zip(range(1, len(infor_utilizador)+1), infor_utilizador)
 
-        for i,j in coisa:
-            print(f"{i}-{j.get('name')} for {j.get('site')}")
+        escolhas = [f"{i}-{j.get('name')} for {j.get('site')}" for i,j in enumerador_de_passwords]
+        for s in escolhas:
+            print(s)
     
     # TODO Meter aqui a coisinha do menu para escolher qual é que eu quero e aprender a copia-la logo para a area de trabalho
 
