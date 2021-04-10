@@ -3,6 +3,7 @@ import string
 import getpass
 import time
 import json
+import pyperclip
 
 #Precisa de ser instalada previamente -> pip install alive_progress
 from alive_progress import alive_bar
@@ -26,7 +27,7 @@ def password_lenght():
 
 def chosen_password_parameters():
     """
-    Pedir ao utilizador os parametros que quer na sua password.  
+    Pedir ao utilizador os parâmetros que quer na sua password.  
     
     Letras = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ". 
 
@@ -79,7 +80,8 @@ def export_password(palavra_pass):
     """
     Depois de gerar a palavra pass, exporta-la para um ficheiro json.   
     Ainda não faço a minima de como é que deve formatar bem os ficheiros json.  
-    TODO Entender melhor o que está a passar nesta parte, so deixei assim porque funciona. Como? n sei 
+    TODO Entender melhor o que está a passar nesta parte, so deixei assim porque funciona.  
+    Como? não sei mas vamos nessa vanessa
     """
     destino = str(input("Onde é que esta password vai ser utilizada? "))
 
@@ -101,9 +103,9 @@ def export_password(palavra_pass):
     
     insert_data(dados)
 
-def get_pass():
+def get_pass(index):
     """
-    Aceder ao ficheiro JSON e ter a pass que queremos ver
+    Aceder ao ficheiro JSON e ter a palavra passe que queremos ver
     """
     with open("passwords/save_files.json", 'r') as p:
         users = json.load(p)
@@ -111,12 +113,41 @@ def get_pass():
 
         enumerador_de_passwords = zip(range(1, len(infor_utilizador)+1), infor_utilizador)
 
-        escolhas = [f"{i}-{j.get('name')} for {j.get('site')}" for i,j in enumerador_de_passwords]
-        for s in escolhas:
-            print(s)
+    escolhas = [f"{i}-{j.get('name')} for {j.get('site')}" for i,j in enumerador_de_passwords]    
     
-    # TODO Meter aqui a coisinha do menu para escolher qual é que eu quero e aprender a copia-la logo para a area de trabalho
+    try:
+        verificar = infor_utilizador[index-1].get("password")
+    except IndexError:
+        print("Não tem palavras pass guardadas nesta aplicação.\nA sair do programa.")
+        time.sleep(1)
+        quit()
 
+    try:
+        print('\n{}'.format(escolhas[index-1]))
+        confirmar = str(input("É esta a pass?(y/n) "))
+        try:
+            if confirmar == "y":
+                time.sleep(1)
+                pyperclip.copy(verificar)
+                print("A palavra pass foi adicionada à área de transferência.")
+        except:
+            return
+    except TypeError:
+        print("Por favor insira corretamente a password que deseja ver.")
+        time.sleep(1)
+        quit()
+    
+def clear_data():
+    """
+    Apagar todas a palavras passe que estão guardadas no ficheiro JSON
+    """
+    with open("passwords/save_files.json", "w+") as save:
+        save.write('''{
+    "user": [
+
+    ]
+}
+        ''')
 
 def main():
     tamanho = password_lenght()
