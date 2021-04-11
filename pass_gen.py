@@ -78,8 +78,8 @@ def generate_password(constituintes ,tamanho):
 
 def export_password(palavra_pass):
     """
-    Depois de gerar a palavra pass, exporta-la para um ficheiro json.   
-    Ainda não faço a minima de como é que deve formatar bem os ficheiros json.  
+    Depois de gerar a palavra passe, exporta-la para um ficheiro json.   
+    ~Ainda não faço a minima de como é que deve formatar bem os ficheiros json.~  Já sei.  
     TODO Entender melhor o que está a passar nesta parte, so deixei assim porque funciona.  
     Como? não sei mas vamos nessa vanessa
     """
@@ -103,7 +103,7 @@ def export_password(palavra_pass):
     
     insert_data(dados)
 
-def get_pass(index):
+def get_password(index):
     """
     Aceder ao ficheiro JSON e ter a palavra passe que queremos ver
     """
@@ -113,7 +113,7 @@ def get_pass(index):
 
         enumerador_de_passwords = zip(range(1, len(infor_utilizador)+1), infor_utilizador)
 
-    escolhas = [f"{i}-{j.get('name')} for {j.get('site')}" for i,j in enumerador_de_passwords]    
+    escolhas = [f"{i} - {j.get('name')} para o {j.get('site')}" for i,j in enumerador_de_passwords]    
     
     try:
         verificar = infor_utilizador[index-1].get("password")
@@ -136,10 +136,25 @@ def get_pass(index):
         print("Por favor insira corretamente a password que deseja ver.")
         time.sleep(1)
         quit()
-    
+
+def see_save():
+    """
+    Ver todas as palavras passe que estão guardadas no ficheiro JSON
+    """
+    with open("passwords/save_files.json", 'r') as p:
+        users = json.load(p)
+        infor_utilizador = users["user"]
+
+        enumerador_de_passwords = zip(range(1, len(infor_utilizador)+1), infor_utilizador)
+
+    escolhas = [f"{i} - {j.get('name')} para o {j.get('site')}" for i,j in enumerador_de_passwords]   
+    for i in escolhas:
+        print(i)
+
 def clear_data():
     """
     Apagar todas a palavras passe que estão guardadas no ficheiro JSON
+    TODO Dar a opção de poder escolher qual delas é que o utilizador quer apagar 
     """
     with open("passwords/save_files.json", "w+") as save:
         save.write('''{
@@ -148,6 +163,8 @@ def clear_data():
     ]
 }
         ''')
+
+    print("Todas as palavras passe foram apagadas")
 
 def main():
     tamanho = password_lenght()
