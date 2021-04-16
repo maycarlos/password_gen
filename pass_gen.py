@@ -8,13 +8,6 @@ import pyperclip
 #Precisa de ser instalada previamente -> pip install alive_progress
 from alive_progress import alive_bar
 
-#Não tenho a certeza se devo meter isto dentro da função chosen_password_parameters ou deixo aqui fora
-letras = string.ascii_letters
-punctuation = string.punctuation
-numero = string.digits
-
-#não se usa a string.printable() para dar a oportunidade de poder escolher o que deseja ter na pass
-
 def password_lenght():
     #Começo a meter Try e excepts em todas as partes que requerem input humano? ou um tipo especifico de dados
     try:
@@ -38,6 +31,8 @@ def chosen_password_parameters():
     quer_letras = input('Queres letras na password?(True/False): ')
     quer_numeros = input('Queres números na password?(True/False): ')
     quer_puntuaction = input('Queres pontuação no password?(True/False): ')
+    #não se usa a string.printable() para dar a oportunidade de poder escolher o que deseja ter na pass
+
 
     resultado = [quer_letras, quer_numeros, quer_puntuaction]
 
@@ -57,6 +52,10 @@ def characters_included(escolha):
     Dá nos uma string com o caracteres que desejamos que sejam incluídos na password.
     Em função da lista que resulta da função chosen_password_parameters
     """
+    letras = string.ascii_letters
+    punctuation = string.punctuation
+    numero = string.digits
+
     modelo_da_pass = ''
     modelo_da_pass += letras if escolha[0] else ''
     modelo_da_pass += numero if escolha[1] else ''
@@ -103,7 +102,7 @@ def export_password(palavra_pass):
     
     insert_data(dados)
 
-def get_password(index):
+def get_password():
     """
     Aceder ao ficheiro JSON e ter a palavra passe que queremos ver
     """
@@ -115,15 +114,20 @@ def get_password(index):
 
     escolhas = [f"{i} - {j.get('name')} para o {j.get('site')}" for i,j in enumerador_de_passwords]    
     
+    for i in escolhas:
+        print(i)
+
+    index = int(input("Qual é a palavra passe que quer? "))
+
     try:
         verificar = infor_utilizador[index-1].get("password")
     except IndexError:
-        print("Não tem palavras pass guardadas nesta aplicação.\nA sair do programa.")
+        print("ERRO. \nNão tem palavras pass guardadas nesta aplicação ou o número que inseriu não consta na lista.\nA sair do programa.")
         time.sleep(1)
         quit()
 
     try:
-        print('\n{}'.format(escolhas[index-1]))
+        print('{}'.format(escolhas[index-1])) 
         confirmar = str(input("É esta a pass?(y/n) "))
         try:
             if confirmar == "y":
@@ -166,7 +170,10 @@ def clear_data():
 
     print("Todas as palavras passe foram apagadas")
 
-def main():
+def password_construct():
+    """
+    Função que acaba por contruir a palavra passe e exporta a mesma. 
+    """
     tamanho = password_lenght()
     parametros_desejados = chosen_password_parameters()
     molde_password = characters_included(parametros_desejados)
@@ -185,4 +192,4 @@ def main():
     print("\nDone!")
 
 if __name__ == '__main__':
-    main()
+    password_construct()
