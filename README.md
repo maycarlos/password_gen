@@ -9,4 +9,4 @@ Usa um módulo que tem que ser instalado previamente que é o [Alive Progress](h
 - [x] Aprender e guardar as passwords num ficheiro JSON(ou outro tipo de ficheiro lindo onde se possa guardar informação) acompanhadas com o ~user~, sítio onde é utilizada e claro ~a password~ encriptada(maybe?).  
 - [X] Quero criar um menu para usar na command line. Usei click e o simple term menu que fez tudo o que eu queria do curses por isso vou utliliza-lo para o resto deste projeto  ~(o módulo curses parece ser bom para isso)~  
 - [x] Fazer todo o processo reverso quando quiser consultar as passwords quardadas.  
-- [ ] Não? ... se calhar, começar a ver e trabalhar com databases (sqlite3 parece ser uma coisinha fixe para aprender alguma coisa de SQL).  
+- [ ] Começar a ver e trabalhar com databases (sqlite3 parece ser uma coisinha fixe para aprender alguma coisa de SQL).  
