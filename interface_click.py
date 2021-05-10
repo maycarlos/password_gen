@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import click
 import pass_gen
@@ -19,7 +19,6 @@ def create():
 def get():
     """
     Ver uma palavra passe armazenada. Use 0 para ver a ultima pass que criou.
-    TODO Meter uma lista na help string com as passes que tenho guardadas
     """
     pass_gen.get_password()
 
