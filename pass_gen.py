@@ -4,8 +4,7 @@ import random
 import string
 import getpass
 import time
-import json
-import pyperclip
+import database_interact
 
 #Precisa de ser instalada previamente -> pip install alive_progress
 from alive_progress import alive_bar
@@ -15,7 +14,7 @@ def password_lenght():
         return int(input('Insira o tamanho da password que deseja obter: '))
     except ValueError:
         print("Por favor insira corretamento o o tamanho que deseja.")
-        time.sleep(1)
+        time.sleep(0.5)
         return password_lenght()
 
 def chosen_password_parameters():
@@ -34,7 +33,7 @@ def chosen_password_parameters():
         except:
             print("O valor que introduziu não permite realizar a função.\nPor favor insira True ou False nos lugares adequados.")
             time.sleep(1)
-            chosen_password_parameters()
+            return chosen_password_parameters()
 
     return resultado
     
@@ -68,76 +67,25 @@ def generate_password(constituintes ,tamanho):
 
 def export_password(palavra_pass):
     """
-    Depois de gerar a palavra passe, exportá-la para um ficheiro json.   
+    Depois de gerar a palavra passe, exportá-la para uma db.   
     """
     destino = str(input("Onde é que esta password vai ser utilizada? "))
 
-    def insert_data(dados):
-        with open("passwords/save_files.json", 'w') as f:
-            json.dump(dados, f, indent= 4)
+    database_interact.dump_password(getpass.getuser().title(), destino, palavra_pass)
 
-    with open("passwords/save_files.json") as save:
-        dados = json.load(save)
-        infor_utilizador = dados["user"] 
-
-        nova_informação = {
-            "name":f"{getpass.getuser().title()}",
-            "site":f"{destino}",
-            "password":f"{palavra_pass}"
-        }
-
-        infor_utilizador.append(nova_informação)
-    
-    insert_data(dados)
 
 def get_password():
     """
     Aceder ao ficheiro JSON e ter a palavra passe que queremos ver.
     """
-    with open("passwords/save_files.json", 'r') as p:
-        users = json.loads(p.read())
+    database_interact.get_passwords()
 
-    infor_utilizador = users["user"]
-    escolhas = [f"{i} - {j.get('name')} para {j.get('site')}" for i,j in enumerate(infor_utilizador, 1)]    
-    
-    for i in escolhas:
-        print(i)
-
-    index = int(input("Qual é a palavra passe que quer? "))
-
-    try:
-        password = infor_utilizador[index-1].get("password")
-    except IndexError:
-        print("ERRO. \nNão tem palavras pass guardadas nesta aplicação ou o número que inseriu não consta na lista.\nA sair do programa.")
-        time.sleep(1)
-        quit()
-
-    try:
-        print(escolhas[index-1])
-        confirmar = str(input("É esta a pass?(y/n) "))
-        try:
-            if confirmar == "y":
-                time.sleep(1)
-                pyperclip.copy(password)
-                print("A palavra pass foi adicionada à área de transferência.")
-        except:
-            return None
-    except TypeError:
-        print("Por favor insira corretamente a password que deseja ver.")
-        time.sleep(1)
-        quit()
 
 def see_save():
     """
     Ver todas as palavras passe que estão guardadas no ficheiro JSON
     """
-    with open("passwords/save_files.json", 'r') as p:
-        users = json.loads(p.read())
-    infor_utilizador = users["user"]
-
-    escolhas = [f"{i} - {j.get('name')} para o {j.get('site')}" for i,j in enumerate(infor_utilizador,1)]   
-    for i in escolhas:
-        print(i)
+    database_interact.see_save()
 
 def clear_data():
     """
@@ -145,33 +93,26 @@ def clear_data():
     """
     action = int(input('Deseja:\n 1-Apagar um palavra passe especifica\n 2-Apagar todas a palavras que estão guardadas? '))
 
-    with open("passwords/save_files.json", 'r') as save:
-        users = json.loads(save.read())
-        infor_utilizador = users["user"]
-
     if action == 1:
-        escolhas = [f"{i} - {j.get('name')} para o {j.get('site')}" for i,j in enumerate(infor_utilizador,1)]   
-        for i in escolhas:
-            print(i)
+        database_interact.see_save()
+
         eraser_index = int(input('Qual é a palavra passe que deseja eliminar? '))
+
         try:
-            with open("passwords/save_files.json", 'w') as f:
-                del(infor_utilizador[eraser_index-1])
-                json.dump(users, f, indent= 4)
-                print("A palavra passe foi apagada")
+            database_interact.delete_one(eraser_index)
         except:
             print("Uh Oh :/")
 
     elif action == 2 :
-        with open("passwords/save_files.json", "w") as f:
-            del(infor_utilizador[:])
-            json.dump(users, f, indent= 4)
-        print("Todas as palavras passe foram apagadas")
+        database_interact.delete_all()
+        print('Done!', end='\n')
 
 def password_construct():
     """
-    Função que acaba por contruir a palavra passe e exporta a mesma para o ficheiro JSON. 
+    Função que acaba por contruir a palavra passe e exporta a mesma para a base de dados. 
     """
+    database_interact.table_creation()
+
     tamanho = password_lenght()
     parametros_desejados = chosen_password_parameters()
     molde_password = characters_included(parametros_desejados)
