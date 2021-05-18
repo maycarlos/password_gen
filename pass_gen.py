@@ -76,20 +76,20 @@ def export_password(palavra_pass):
 
 def get_password():
     """
-    Aceder ao ficheiro JSON e ter a palavra passe que queremos ver.
+    Aceder a DB e ter a palavra passe que queremos ver.
     """
     database_interact.get_passwords()
 
 
 def see_save():
     """
-    Ver todas as palavras passe que estão guardadas no ficheiro JSON
+    Ver todas as palavras passe que estão guardadas na DB
     """
     database_interact.see_save()
 
 def clear_data():
     """
-    Apagar todas a palavras passe que estão guardadas no ficheiro JSON
+    Apagar todas a palavras passe que estão guardadas na DB
     """
     action = int(input('Deseja:\n 1-Apagar um palavra passe especifica\n 2-Apagar todas a palavras que estão guardadas? '))
 

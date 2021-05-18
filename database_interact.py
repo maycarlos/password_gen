@@ -28,17 +28,14 @@ def dump_password(user, target_site,user_password):
 def see_save():
 
     info = get_info()
-    
     lista = [f'{n} - {i[0]} para o site {i[1]}' for n, i in enumerate(info, 1)]
-
     for i in lista:
         print(i)
 
 def get_passwords():
+
     info = get_info()
-
     lista = [f'{n} - User: {i[0]} para o site: {i[1]}' for n, i in enumerate(info, 1)]
-
     for i in lista:
         print(i)
     
@@ -60,15 +57,12 @@ def get_info():
     return curs.fetchall()
 
 def delete_one(index):
-
     info = get_info()
-
     target_site = info[index-1][1]
 
     with conn:
         curs.execute("DELETE from user_passwords WHERE site = :site",
         {'site':target_site})
-
 
 def delete_all():
     with conn:

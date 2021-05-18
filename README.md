@@ -3,7 +3,6 @@
 Um básico gerador de passwords para treinar algumas coisas que fui aprendendo ao longo do tempo.  
 Usa um módulo que tem que ser instalado previamente que é o [Alive Progress](https://github.com/rsalmei/alive-progress) de resto acho que é tudo built-in no python.
 
-
 ## Flow deste projecto
 
 - Download -> `git clone https://github.com/maycarlos/password_gen`
