@@ -4,10 +4,14 @@ import random
 import string
 import getpass
 import time
+import click
 import database_interact
 
 #Precisa de ser instalada previamente -> pip install alive_progress
 from alive_progress import alive_bar
+
+
+# Todas as preparações para fazer a palavra passe
 
 def password_lenght():
     try:
@@ -74,19 +78,27 @@ def export_password(palavra_pass):
     database_interact.dump_password(getpass.getuser().title(), destino, palavra_pass)
 
 
+# Parte do CLI com o módulo Click
+
+@click.group()
+def menu():
+    pass
+
+@menu.command('get')
 def get_password():
     """
     Aceder a DB e ter a palavra passe que queremos ver.
     """
     database_interact.get_passwords()
 
-
+@menu.command('see')
 def see_save():
     """
     Ver todas as palavras passe que estão guardadas na DB
     """
     database_interact.see_save()
 
+@menu.command('clear')
 def clear_data():
     """
     Apagar todas a palavras passe que estão guardadas na DB
@@ -107,6 +119,8 @@ def clear_data():
         database_interact.delete_all()
         print('Done!', end='\n')
 
+
+@menu.command('create', short_help='cria a palavra passe')
 def password_construct():
     """
     Função que acaba por contruir a palavra passe e exporta a mesma para a base de dados. 
@@ -129,3 +143,6 @@ def password_construct():
     export_password(password_desejada)
 
     print("\nDone!")
+
+if __name__ =='__main__':
+    menu()
