@@ -94,7 +94,7 @@ def clear_data(action):
     """
     Apagar palavras passe que estão guardadas na DB
     action = (1) para apagar só 1 palavra pass
-    action = (|) para apagar todas
+    action = (2) para apagar todas
     """
     if action == 1:
         database_interact.see_save()

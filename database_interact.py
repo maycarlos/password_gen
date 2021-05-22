@@ -2,6 +2,7 @@
 
 import sqlite3
 import pyperclip
+import click
 
 conn = sqlite3.connect('passwords/database.db')
 
@@ -39,8 +40,8 @@ def get_passwords():
 
     try:
         print(lista[index -1])
-        confirmar = str(input("É esta a pass?(y/n) "))
-        if confirmar == 'y':
+        confirmar = click.confirm("É esta a pass?", default=True)
+        if confirmar:
             password = info[index-1][2]
             pyperclip.copy(password)
             print("A palavra pass foi adicionada à área de transferência.")
