@@ -7,7 +7,6 @@ conn = sqlite3.connect('passwords/database.db')
 
 curs = conn.cursor()
 
-
 def table_creation():
     try:
         curs.execute("""
@@ -16,7 +15,6 @@ def table_creation():
         site TEXT,
         password TEXT
         )""")
-
     except sqlite3.OperationalError:
         return None
 
@@ -26,16 +24,14 @@ def dump_password(user, target_site,user_password):
          {'username':user, 'site':target_site, 'password':user_password})
 
 def see_save():
-
     info = get_info()
     lista = [f'{n} - {i[0]} para o site {i[1]}' for n, i in enumerate(info, 1)]
     for i in lista:
         print(i)
 
 def get_passwords():
-
     info = get_info()
-    lista = [f'{n} - User: {i[0]} para o site: {i[1]}' for n, i in enumerate(info, 1)]
+    lista = [f'{n} - {i[0]} para o site {i[1]}' for n, i in enumerate(info, 1)]
     for i in lista:
         print(i)
     
@@ -50,7 +46,6 @@ def get_passwords():
             print("A palavra pass foi adicionada à área de transferência.")
     except:
         print('Fiz algo não muito bom!')
-
 
 def get_info():
     curs.execute("SELECT * FROM user_passwords")
