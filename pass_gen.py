@@ -4,12 +4,16 @@ import random
 import string
 import getpass
 import time
+import click
 import database_interact
 
-#Precisa de ser instalada previamente -> pip install alive_progress
+# not built in mas o setup.py trata disso
 from alive_progress import alive_bar
 
-def password_lenght():
+
+# Todas as preparações para fazer a palavra passe
+
+def password_lenght() -> int:
     try:
         return int(input('Insira o tamanho da password que deseja obter: '))
     except ValueError:
@@ -17,55 +21,46 @@ def password_lenght():
         time.sleep(0.5)
         return password_lenght()
 
-def chosen_password_parameters():
+def chosen_password_parameters() -> list:
     """
     Pedir ao utilizador os parâmetros que quer na sua password.  
     """
-    quer_letras = input('Queres letras na password?(True/False): ')
-    quer_numeros = input('Queres números na password?(True/False): ')
-    quer_puntuaction = input('Queres pontuação no password?(True/False): ')
+    quer_letras = click.confirm('Queres letras na password? ', default='True')
+    quer_numeros = click.confirm('Queres números na password? ', default='True')
+    quer_puntuaction = click.confirm('Queres pontuação no password? ', default = 'True')
 
     resultado = [quer_letras, quer_numeros, quer_puntuaction]
-    #Substitui todas as strings com Booleans
-    for i,j in enumerate(resultado):
-        try:
-            resultado[i] = eval(j.title())
-        except:
-            print("O valor que introduziu não permite realizar a função.\nPor favor insira True ou False nos lugares adequados.")
-            time.sleep(1)
-            return chosen_password_parameters()
 
     return resultado
     
-def characters_included(escolha):
+def characters_included(escolha: list) -> str:
     """
     Dá nos uma string com o caracteres que desejamos que sejam incluídos na password.
     Em função da lista que resulta da função chosen_password_parameters
     """
-    letras = string.ascii_letters
-    punctuation = string.punctuation
-    numero = string.digits
+    LETTERS = string.ascii_letters
+    PUNCTUATION = string.punctuation
+    DIGITS = string.digits
 
     modelo_da_pass = ''
-    modelo_da_pass += letras if escolha[0] else ''
-    modelo_da_pass += numero if escolha[1] else ''
-    modelo_da_pass += punctuation if escolha[2] else ''
+    modelo_da_pass += LETTERS if escolha[0] else ''
+    modelo_da_pass += DIGITS if escolha[1] else ''
+    modelo_da_pass += PUNCTUATION if escolha[2] else ''
 
     return modelo_da_pass
 
-def generate_password(constituintes ,tamanho):
+def generate_password(constituintes: str ,tamanho : int) -> str:
     """
     Depois de termos todos os parametros da password definidos.  
     Damos shufle a string com os constituintes e cortamos a string resultante em função do tamanho determinado
     """
-    baralho = list(constituintes)
+    baralho = random.sample(constituintes, tamanho)
     random.shuffle(baralho)
     pass_final = ''.join(baralho)
 
-    #Aqui apenas pego nos primeiros n caracteres da string baralhada, se calhar devo escolher letras aleatoriamente da string(?)
-    return pass_final[:tamanho]
+    return pass_final
 
-def export_password(palavra_pass):
+def export_password(palavra_pass) -> None:
     """
     Depois de gerar a palavra passe, exportá-la para uma db.   
     """
@@ -74,25 +69,33 @@ def export_password(palavra_pass):
     database_interact.dump_password(getpass.getuser().title(), destino, palavra_pass)
 
 
+# Parte do CLI com o módulo Click
+@click.group()
+def menu():
+    pass
+
+@menu.command('get', short_help='Obter uma palavra passe da DB')
 def get_password():
     """
-    Aceder a DB e ter a palavra passe que queremos ver.
+    Aceder a DB e obter a palavra passe que queremos ver.
     """
     database_interact.get_passwords()
 
-
+@menu.command('see', short_help='Ver as palavras passe guardadass')
 def see_save():
     """
-    Ver todas as palavras passe que estão guardadas na DB
+    Ver as palavras passe que estão guardadas na DB
     """
     database_interact.see_save()
 
-def clear_data():
+@menu.command('clear', short_help='Apagar palavras passe')
+@click.option('--action', '-a', type = int, required = True)
+def clear_data(action):
     """
-    Apagar todas a palavras passe que estão guardadas na DB
+    Apagar palavras passe que estão guardadas na DB
+    action = (1) para apagar só 1 palavra pass
+    action = (|) para apagar todas
     """
-    action = int(input('Deseja:\n 1-Apagar um palavra passe especifica\n 2-Apagar todas a palavras que estão guardadas? '))
-
     if action == 1:
         database_interact.see_save()
 
@@ -100,6 +103,7 @@ def clear_data():
 
         try:
             database_interact.delete_one(eraser_index)
+            print('Done!', end='\n')
         except:
             print("Uh Oh :/")
 
@@ -107,6 +111,8 @@ def clear_data():
         database_interact.delete_all()
         print('Done!', end='\n')
 
+
+@menu.command('create', short_help='Constroi a palavra passe')
 def password_construct():
     """
     Função que acaba por contruir a palavra passe e exporta a mesma para a base de dados. 
@@ -129,3 +135,6 @@ def password_construct():
     export_password(password_desejada)
 
     print("\nDone!")
+
+if __name__ =='__main__':
+    menu()
