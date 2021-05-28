@@ -2,9 +2,8 @@
 
 import sqlite3
 import pyperclip
-import click
 
-conn = sqlite3.connect('passwords/database.sqlite')
+conn = sqlite3.connect('pass_gen/passwords/database.sqlite')
 
 curs = conn.cursor()
 

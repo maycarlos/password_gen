@@ -2,4 +2,4 @@ __pycache__
 .vscode
 /ven
 pass_gen.egg-info
-workflow.txt
+passwords/database.sqlite
