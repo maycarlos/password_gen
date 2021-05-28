@@ -19,7 +19,7 @@ def table_creation():
     except sqlite3.OperationalError:
         return None
 
-def dump_password(user, target_site,user_password):
+def dump_password(user, target_site, user_password):
     with conn:
         curs.execute("INSERT INTO user_passwords VALUES (:username, :site, :password)",
          {'username':user, 'site':target_site, 'password':user_password})
@@ -39,12 +39,9 @@ def get_passwords():
     index = int(input("Qual é a palavra passe que quer? "))
 
     try:
-        print(lista[index -1])
-        confirmar = click.confirm("É esta a pass?", default=True)
-        if confirmar:
-            password = info[index-1][2]
-            pyperclip.copy(password)
-            print("A palavra pass foi adicionada à área de transferência.")
+        password = info[index-1][2]
+        pyperclip.copy(password)
+        print("A palavra pass foi adicionada à área de transferência.")
     except:
         print('Fiz algo não muito bom!')
 

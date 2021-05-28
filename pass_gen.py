@@ -87,29 +87,29 @@ def see_save():
     Ver as palavras passe que estão guardadas na DB
     """
     database_interact.see_save()
-#TODO ALterar isto para se poder pedir para apagar logo com um -a para all ou -o para um
-@menu.command('clear', short_help='Apagar palavras passe')
-@click.option('--ation', '-a', type = int, required = True)
-def clear_data(action):
+
+@menu.command('delete', short_help='Apagar palavras passe')
+@click.option('--all', '-a', is_flag=True)
+@click.option('--one', '-o', is_flag=True)
+def delete_data(one, all):
     """
     Apagar palavras passe que estão guardadas na DB
     action = (1) para apagar só 1 palavra pass
     action = (2) para apagar todas
     """
-    if action == 1:
+    if one:
         database_interact.see_save()
-
         eraser_index = int(input('Qual é a palavra passe que deseja eliminar? '))
 
         try:
             database_interact.delete_one(eraser_index)
-            print('Done!', end='\n')
+            
         except:
             print("Uh Oh :/")
-
-    elif action == 2 :
+    if all:
         database_interact.delete_all()
-        print('Done!', end='\n')
+
+    print('Done!', end='\n')
 
 
 @menu.command('create', short_help='Constroi a palavra passe')
