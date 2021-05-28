@@ -5,7 +5,9 @@ Um básico gerador de passwords para treinar algumas coisas que fui aprendendo a
 O `setup.py` trata disso
 
 ## Flow deste projecto
+
 - Download -> `curl ou git clone https://github.com/maycarlos/password_gen`
+
 - Ainda não tenho a certeza se se deve fazer isto mas no ficheiro `setup.py` já está especificado tudo o que é preciso para isto funcionar por isso é só fazer `pip install -e .` que todas as dependencies são logo instaladas e basta usar o comando da seguinte forma: `pass_gen [commands]`
 
 ## Mais umas coisinhas para fazer

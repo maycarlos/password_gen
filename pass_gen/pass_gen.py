@@ -2,15 +2,15 @@
 
 import random
 import string
-import getpass
 import time
 import click
-import database_interact
+from . import database_interact
 
 # not built in mas o setup.py trata disso
 from alive_progress import alive_bar
+import getpass
 
-
+# TODO pensar se devo fazer uma classe para automatizar a construçao da palavra passe
 # Todas as preparações para fazer a palavra passe
 
 def password_lenght() -> int:
@@ -18,7 +18,6 @@ def password_lenght() -> int:
         return int(input('Insira o tamanho da password que deseja obter: '))
     except ValueError:
         print("Por favor insira corretamento o o tamanho que deseja.")
-        time.sleep(0.5)
         return password_lenght()
 
 def chosen_password_parameters() -> list:
@@ -81,7 +80,7 @@ def get_password():
     """
     database_interact.get_passwords()
 
-@menu.command('see', short_help='Ver as palavras passe guardadass')
+@menu.command('see', short_help='Ver as palavras passe guardadas')
 def see_save():
     """
     Ver as palavras passe que estão guardadas na DB
@@ -94,8 +93,8 @@ def see_save():
 def delete_data(one, all):
     """
     Apagar palavras passe que estão guardadas na DB
-    action = (1) para apagar só 1 palavra pass
-    action = (2) para apagar todas
+    -a / --all para apagar todas palavras passe que estão na DB
+    -o / --one para apagar só uma palavra passe 
     """
     if one:
         database_interact.see_save()
