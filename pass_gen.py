@@ -23,7 +23,7 @@ def password_lenght() -> int:
 
 def chosen_password_parameters() -> list:
     """
-    Pedir ao utilizador os parâmetros que quer na sua password.  
+    Pedir ao utilizador os parâmetros que quer na sua password.
     """
     quer_letras = click.confirm('Queres letras na password? ', default='True')
     quer_numeros = click.confirm('Queres números na password? ', default='True')
@@ -32,7 +32,7 @@ def chosen_password_parameters() -> list:
     resultado = [quer_letras, quer_numeros, quer_puntuaction]
 
     return resultado
-    
+
 def characters_included(escolha: list) -> str:
     """
     Dá nos uma string com o caracteres que desejamos que sejam incluídos na password.
@@ -46,12 +46,12 @@ def characters_included(escolha: list) -> str:
     modelo_da_pass += LETTERS if escolha[0] else ''
     modelo_da_pass += DIGITS if escolha[1] else ''
     modelo_da_pass += PUNCTUATION if escolha[2] else ''
-
+    
     return modelo_da_pass
 
 def generate_password(constituintes: str ,tamanho : int) -> str:
     """
-    Depois de termos todos os parametros da password definidos.  
+    Depois de termos todos os parametros da password definidos.
     Damos shufle a string com os constituintes e cortamos a string resultante em função do tamanho determinado
     """
     baralho = random.sample(constituintes, tamanho)
@@ -62,7 +62,7 @@ def generate_password(constituintes: str ,tamanho : int) -> str:
 
 def export_password(palavra_pass) -> None:
     """
-    Depois de gerar a palavra passe, exportá-la para uma db.   
+    Depois de gerar a palavra passe, exportá-la para uma db.
     """
     destino = str(input("Onde é que esta password vai ser utilizada? "))
 
@@ -88,34 +88,34 @@ def see_save():
     """
     database_interact.see_save()
 
-@menu.command('clear', short_help='Apagar palavras passe')
-@click.option('--action', '-a', type = int, required = True)
-def clear_data(action):
+@menu.command('delete', short_help='Apagar palavras passe')
+@click.option('--all', '-a', is_flag=True)
+@click.option('--one', '-o', is_flag=True)
+def delete_data(one, all):
     """
     Apagar palavras passe que estão guardadas na DB
     action = (1) para apagar só 1 palavra pass
-    action = (|) para apagar todas
+    action = (2) para apagar todas
     """
-    if action == 1:
+    if one:
         database_interact.see_save()
-
         eraser_index = int(input('Qual é a palavra passe que deseja eliminar? '))
 
         try:
             database_interact.delete_one(eraser_index)
-            print('Done!', end='\n')
+            
         except:
             print("Uh Oh :/")
-
-    elif action == 2 :
+    if all:
         database_interact.delete_all()
-        print('Done!', end='\n')
+
+    print('Done!', end='\n')
 
 
 @menu.command('create', short_help='Constroi a palavra passe')
 def password_construct():
     """
-    Função que acaba por contruir a palavra passe e exporta a mesma para a base de dados. 
+    Função que acaba por contruir a palavra passe e exporta a mesma para a base de dados.
     """
     database_interact.table_creation()
 
@@ -123,14 +123,14 @@ def password_construct():
     parametros_desejados = chosen_password_parameters()
     molde_password = characters_included(parametros_desejados)
     password_desejada = generate_password(molde_password, tamanho)
-    
+
     #Sem utilidade nenhuma, apenas acho engraçado ter barras
     with alive_bar(100, 'A gerar a password') as bar:
         for _ in range(100):
             time.sleep(0.01)
             bar()
-    
-    print(f"\nUser:\t\t{getpass.getuser().title()}.\nPassword:\t{password_desejada}")
+
+    print(f"\nUser:\t\t{getpass.getuser().title()}\nPassword:\t{password_desejada}")
 
     export_password(password_desejada)
 
