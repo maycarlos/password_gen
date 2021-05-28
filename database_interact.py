@@ -4,14 +4,14 @@ import sqlite3
 import pyperclip
 import click
 
-conn = sqlite3.connect('passwords/database.db')
+conn = sqlite3.connect('passwords/database.sqlite')
 
 curs = conn.cursor()
 
 def table_creation():
     try:
         curs.execute("""
-        CREATE TABLE user_passwords(
+        CREATE TABLE IF NOT EXISTS user_passwords(
         user TEXT,
         site TEXT,
         password TEXT
