@@ -47,7 +47,9 @@ class Password:
 
     def construct(self) -> None:
 
-        self.password = self.generate(choice = self.parameters(), size = self.lenght())
+        self.password = self.generate(size = self.lenght(), choice = self.parameters())
+
+        print(f"\nUser:\t\t{self.user}\nPassword:\t{self.password}", end='\n')
+        
         self.destination = input("Onde é que esta password vai ser utilizada? ")
 
-        print(f"\nUser:\t\t{self.user}\nPassword:\t{self.password}")

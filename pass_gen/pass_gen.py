@@ -39,12 +39,11 @@ def delete_data(one, all):
         eraser_index = int(input('Qual é a palavra passe que deseja eliminar? '))
 
         try:
-            database_interact.delete_one(eraser_index)
-            
+            database_interact.delete_info(eraser_index, one=one)
         except:
             print("Uh Oh :/")
     if all:
-        database_interact.delete_all()
+        database_interact.delete_info(all=all)
 
     print('Done!', end='\n')
 
@@ -60,7 +59,7 @@ def main():
     password.construct()
 
     #Sem utilidade nenhuma, apenas acho engraçado ter barras
-    with alive_bar(100, 'A gerar a password') as bar:
+    with alive_bar(100, 'Espere só um pouco.') as bar:
         for _ in range(100):
             time.sleep(0.01)
             bar()

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sqlite3
+from typing import Optional
 import pyperclip
 
 try:
@@ -25,7 +26,7 @@ def get_info():
     curs.execute("SELECT * FROM user_passwords")
     return curs.fetchall()
 
-def insert_info(user, target_site, user_password):
+def insert_info(user: str, target_site: str, user_password: str):
     with conn:
         curs.execute("INSERT INTO user_passwords VALUES (:username, :site, :password)",
          {'username':user, 'site':target_site, 'password':user_password})
@@ -51,14 +52,14 @@ def get_passwords():
     except:
         print('Fiz algo não muito bom!')
 
-def delete_one(index):
-    info = get_info()
-    target_site = info[index-1][1]
+def delete_info(index:Optional[int] = None, one: bool = False, all: bool = False):
+    if one:
+        info = get_info()
+        target_site = info[index-1][1]
 
-    with conn:
-        curs.execute("DELETE from user_passwords WHERE site = :site",
-        {'site':target_site})
-
-def delete_all():
-    with conn:
-        curs.execute("DELETE from user_passwords")
+        with conn:
+            curs.execute("DELETE from user_passwords WHERE site = :site",
+            {'site':target_site})
+    if all:
+        with conn:
+            curs.execute("DELETE from user_passwords")
