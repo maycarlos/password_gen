@@ -3,9 +3,12 @@
 import sqlite3
 import pyperclip
 
-conn = sqlite3.connect('pass_gen/passwords/database.sqlite')
-
-curs = conn.cursor()
+try:
+    conn = sqlite3.connect('pass_gen/passwords/database.sqlite')
+except:
+    conn = sqlite3.connect('passwords/database.sqlite')
+finally:
+    curs = conn.cursor()
 
 def table_creation():
     try:
