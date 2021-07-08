@@ -21,7 +21,11 @@ def table_creation():
     except sqlite3.OperationalError:
         return None
 
-def dump_password(user, target_site, user_password):
+def get_info():
+    curs.execute("SELECT * FROM user_passwords")
+    return curs.fetchall()
+
+def insert_info(user, target_site, user_password):
     with conn:
         curs.execute("INSERT INTO user_passwords VALUES (:username, :site, :password)",
          {'username':user, 'site':target_site, 'password':user_password})
@@ -46,10 +50,6 @@ def get_passwords():
         print("A palavra pass foi adicionada à área de transferência.")
     except:
         print('Fiz algo não muito bom!')
-
-def get_info():
-    curs.execute("SELECT * FROM user_passwords")
-    return curs.fetchall()
 
 def delete_one(index):
     info = get_info()
