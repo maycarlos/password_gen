@@ -38,6 +38,7 @@ def see_save():
         print(i)
 
 def get_passwords():
+    
     info = get_info()
     lista = [f'{n} - {i[0]} para o site {i[1]}' for n, i in enumerate(info, 1)]
     for i in lista:
@@ -53,6 +54,7 @@ def get_passwords():
         print('Fiz algo não muito bom!')
 
 def delete_info(index:Optional[int] = None, one: bool = False, all: bool = False):
+
     if one:
         info = get_info()
         target_site = info[index-1][1]

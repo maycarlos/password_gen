@@ -2,10 +2,9 @@
 
 import time
 import click
-from dataclasses import dataclass
-from alive_progress import alive_bar
 from . import database_interact
-from . import password_class
+from pass_gen.password_class import Password
+from alive_progress import alive_bar
 
 @click.group()
 def menu():
@@ -13,16 +12,12 @@ def menu():
 
 @menu.command('get', short_help='Obter uma palavra passe da DB')
 def get_password():
-    """
-    Aceder a DB e obter a palavra passe que queremos ver.
-    """
+    """Aceder a DB e obter a palavra passe que queremos ver."""
     database_interact.get_passwords()
 
 @menu.command('see', short_help='Ver as palavras passe guardadas')
 def see_save():
-    """
-    Ver as palavras passe que estão guardadas na DB
-    """
+    """Ver as palavras passe que estão guardadas na DB."""
     database_interact.see_save()
 
 @menu.command('delete', short_help='Apagar palavras passe')
@@ -30,32 +25,39 @@ def see_save():
 @click.option('--one', '-o', is_flag=True)
 def delete_data(one, all):
     """
-    Apagar palavras passe que estão guardadas na DB
-    -a / --all para apagar todas palavras passe que estão na DB
-    -o / --one para apagar só uma palavra passe 
+    Apagar palavras passe que estão guardadas na DB.  
+    -a / --all para apagar todas palavras passe que estão na DB.  
+    -o / --one para apagar só uma palavra passe.   
     """
+
     if one:
+
         database_interact.see_save()
         eraser_index = int(input('Qual é a palavra passe que deseja eliminar? '))
 
         try:
             database_interact.delete_info(eraser_index, one=one)
+            print('Done!', end='\n')
+
         except:
             print("Uh Oh :/")
-    if all:
-        database_interact.delete_info(all=all)
+    elif all:
 
-    print('Done!', end='\n')
+        database_interact.delete_info(all=all)
+        print('Done!', end='\n')
+
+    else:
+        print("Por favor, especifique o que quer apagar")
+
 
 
 @menu.command('create', short_help='Constroi a palavra passe')
 def main():
-    """
-    Função que acaba por contruir a palavra passe e exporta a mesma para a base de dados.
-    """
+    """Função que acaba por contruir a palavra passe e exporta a mesma para a base de dados."""
+
     database_interact.table_creation()
 
-    password = password_class.Password()
+    password = Password()
     password.construct()
 
     #Sem utilidade nenhuma, apenas acho engraçado ter barras

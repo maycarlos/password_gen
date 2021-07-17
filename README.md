@@ -2,7 +2,7 @@
 
 Um básico gerador de passwords para treinar algumas coisas que fui aprendendo ao longo do tempo.  
 
-## Depenências
+## Dependências
 
 Ao utilizar `pip install -e .` as dependências são todas instaladas mas é sempre bom referir:  
 
