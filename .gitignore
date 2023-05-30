@@ -3,3 +3,4 @@ __pycache__
 /ven
 pass_gen.egg-info
 pass_gen/passwords/database.sqlite
+.idea
